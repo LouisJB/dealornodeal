@@ -1,0 +1,3 @@
+#!/bin/bash
+
+gcc dealornodeal.c -o dealornodeal

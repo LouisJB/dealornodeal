@@ -1,0 +1,5 @@
+#!/bin/bash
+
+./buildit
+chmod +x dealornodeal
+./dealornodeal
