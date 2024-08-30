@@ -28,21 +28,28 @@ void showClosedBoxes(Box *boxes, int noBoxes, int myBox);
 float average(int *values, int size);
 int getOffer(Box *boxes, int noBoxes);
 
+bool colourEnabled = false;
+void setColour(char* col) {
+  if (colourEnabled) {
+    printf("%s%s", ESC, col);
+  }
+}
 char* getString(char* msg, char* buff, int len) {
   printf("%s", msg);
   scanf(" %s", buff);
   return buff;
 }
 
-
 int main() {
+  setvbuf(stdout, NULL, _IONBF, 0);
+  sleep(1);
   return doGame();
 }
 
 int doGame() {
   //printf("\e[33m");
-  printf("%s%s", ESC, YELLOW);
-  printf("---------------------------\r\n\n");
+  setColour(YELLOW);
+  printf("---------------------------\r\n");
   printf("Welcome to deal or no deal!\r\n");
   printf("---------------------------\r\n\n");
   printf("\e[37m");

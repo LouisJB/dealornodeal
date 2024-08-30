@@ -1,5 +1,9 @@
 #!/bin/bash
 
 ./buildit
-chmod +x dealornodeal
-./dealornodeal
+
+if [ $? -eq 0 ]; then
+  chmod +x dealornodeal
+  ./dealornodeal
+fi
+
