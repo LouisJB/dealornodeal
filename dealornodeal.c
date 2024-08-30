@@ -30,14 +30,25 @@ int getOffer(Box *boxes, int noBoxes);
 
 bool colourEnabled = false;
 void setColour(char* col) {
-  if (colourEnabled) {
-    printf("%s%s", ESC, col);
-  }
+  if (colourEnabled) printf("%s%s", ESC, col);
 }
 char* getString(char* msg, char* buff, int len) {
   printf("%s", msg);
   scanf(" %s", buff);
   return buff;
+}
+
+int getNum() {
+  int myBox;
+  while (!scanf("%d%*c", &myBox) || (myBox < 0 || myBox > noOfPrizes)) {
+    printf("Invalid entry, please chose a valid box \n");
+    while(getchar() != '\n');
+  }
+  if (myBox == 0) {
+    printf("Ending game, thanks for playing... 73\n");
+    exit(0); // terminate
+  }
+  return myBox;
 }
 
 int main() {
@@ -47,17 +58,16 @@ int main() {
 }
 
 int doGame() {
-  //printf("\e[33m");
   setColour(YELLOW);
   printf("---------------------------\r\n");
   printf("Welcome to deal or no deal!\r\n");
   printf("---------------------------\r\n\n");
   printf("\e[37m");
 
-  char name[32];
-  printf("Please enter your name:");
+  char name[32] = {};
+  printf("Please enter your name: ");
   scanf("%[^\n]s", (char*)&name);
-  printf("Hello %s, welcome to the game, good luck!\r\n", name);
+  printf("Hello %s, welcome to the game, good luck! (enter 0 to exit)\r\n", name);
 
   Box boxes[noOfPrizes];
   for(int i = 0; i < noOfPrizes; i++) {
@@ -71,14 +81,9 @@ int doGame() {
     printf("$%d ", thePrizes[i]);
   }
   printf("\n\r\n\r");
-
-  int myBox;
-  printf("Please pick a box:");
-  scanf("%d", &myBox);
-  while (myBox < 1 || myBox > noOfPrizes) {
-    printf("Invalid entry, please chose a valid box \n'r");
-    scanf("%d", &myBox);
-  }
+  
+  printf("Please pick a valid box by number (+ enter): ");
+  int myBox = getNum();
   printf("You have chosen box %d\n\r", myBox);
  
   srand(time(NULL));   // Initialization, should only be called once.
@@ -100,13 +105,12 @@ int doGame() {
     printf("\n\rRound %d, pick %d boxes\n\r", rn+1, roundSize);
   
     for(int i = 0; i < roundSize; i++) {
-      int bn;
       showClosedBoxes(boxes, noOfPrizes, myBox);
-      printf("\n\r%d - pick an available box: ", i+1);
-      scanf("%d", &bn);
+      printf("\n\r%d - pick an available box number (+ enter): ", i+1);
+      int bn = getNum();
       while( (bn < 1) || (bn > noOfPrizes) || (boxes[bn-1].opened == true) || bn == myBox) {
         printf("Box %d is not available, pick another: ", bn);
-        scanf("%d", &bn);
+        bn = getNum();
       }
       printf("Picked %d, opening....\n\r", bn);
       sleep(3);
@@ -129,7 +133,7 @@ int doGame() {
     char yn;
     scanf(" %c", &yn);
     while( yn != 'y' && yn != 'n') {
-      printf("Invalid input, please type y or n + enter");
+      printf("Invalid input, please type y or n (+ enter)");
       scanf(" %c", &yn);
     }
     if (yn == 'y') {
